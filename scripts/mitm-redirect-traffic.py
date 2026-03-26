@@ -29,9 +29,13 @@ hosts = {
     "patch.wdfp.kakaogames.com": 3
 }
 
-def dns_request(flow: dns.DNSFlow):
+def dns_response(flow: dns.DNSFlow):
     if not flow.request.query or flow.request.questions is None: return
     #logging.info(f"[INFO] DNS request for {flow.request.questions}")
+    
+    if not flow.response:
+        return
+
     for question in flow.request.questions:
         name = question.name
         prefix_type = hosts.get(name) if question.type == 1 else None
